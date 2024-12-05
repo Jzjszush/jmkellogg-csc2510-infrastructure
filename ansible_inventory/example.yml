@@ -1,0 +1,50 @@
+---
+- name: example ansible
+  hosts: all
+  become: no
+  become_method: sudo
+
+  name: Setup Apache Web Server
+  hosts: devops
+  become: yes
+  tasks:
+    - name: Install python3-apt
+      apt:
+       name: python3-apt
+       state: present
+
+    - name: Install Apache2
+      apt:
+       name: apache2
+       state: present
+
+    - name: Copy Apache configuration 
+      copy:
+        src: files/config/apache2.conf
+        dest: /etc/apache2/apache2.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+     
+
+    - name: copy website index.html
+      copy: 
+        src: files/site/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: create symbolic link
+      file:
+       src: /etc/apache2/sites-available/000-default.conf
+       dest: /etc/apache2/stes-enabled/000-default.conf
+
+    - name: restart apache2 service 
+      service:
+              name: apache2
+              state: restarted 
+
+
+

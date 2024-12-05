@@ -1,0 +1,7 @@
+i---
+- host: all
+  become: no
+  become_method: sudo
+
+
+
